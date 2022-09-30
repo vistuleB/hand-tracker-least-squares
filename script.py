@@ -208,11 +208,31 @@ class mn2:
         return v2(self.col1.dot(other), self.col2.dot(other))
 
 
-P = vn([0.5374, 0.5460, 0.5511])
-Qcol1 = vn([0.1985, 0.3939, 0.4897])
-Qcol2 = vn([x**2 for x in Qcol1])
 
-Q = mn2(Qcol1, Qcol2)
+# P = vn([0.1875, 0.3069, 0.3813])
+# Z = vn([0.3306, 0.4951, 0.5740])
+
+Z = vn([0.1974, 0.4060, 0.5502])
+P = vn([0.2302, 0.4055, 0.6328])
+
+Z = vn([0.2251, 0.3147, 0.5085])
+P = vn([0.2909, 0.4065, 0.5938])
+
+Q = mn2(Z, vn([z**2 for z in Z]))
 Qt_Q = Q.own_transpose_times_self()
 
-print((Qt_Q.inverse()) * Q.own_transpose_times_vector(P))
+c1c2 = Qt_Q.inverse() * Q.own_transpose_times_vector(P)
+c1 = c1c2.x
+c2 = c1c2.y
+
+print("")
+for i, (p, z) in enumerate(zip(P, Z)):
+    print(f"p/z ratio distance number {i + 1}: {fmt(p/z)} (inverse: {fmt(z/p)})")
+
+print("")
+print(f"c1, c2: {fmt(c1)}, {fmt(c2)}")
+
+print("")
+for p, z in zip(P, Z):
+    print(f"measured: {fmt(p)}; c1-c2 model: {fmt(z * c1 + (z**2) * c2)}")
+
